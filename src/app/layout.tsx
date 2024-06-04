@@ -8,7 +8,6 @@
 import { NextUIProvider } from '@nextui-org/react';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import Script from 'next/script'
 
 import BaiDuAnalytics from '@/components/Analytics/BaiDuAnalytics'; // 百度统计
 import GoogleUtilities from '@/components/Analytics/GoogleUtilities'; // 谷歌统计
@@ -94,10 +93,6 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </NextUIProvider>
-      <Script
-          src="https://api.concord.tech/site-v1/b79e079e-2bdf-4048-a587-ea3ffbcd5fe4/site-client"
-          strategy="beforeInteractive"
-        ></Script>
       </body>
     </html>
   );
