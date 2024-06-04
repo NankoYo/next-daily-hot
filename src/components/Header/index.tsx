@@ -8,6 +8,7 @@
 import { Tooltip } from '@nextui-org/react';
 import Image from 'next/image';
 import { RiGithubFill } from 'react-icons/ri';
+import Script from "next/script";
 
 import BackTop from '@/components/BackTop';
 import RealTime from '@/components/RealTime';
