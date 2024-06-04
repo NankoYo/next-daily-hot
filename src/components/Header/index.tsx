@@ -5,7 +5,6 @@
  * @LastEditTime: 2024-05-16 16:04:03
  * @Description: 头部布局
  */
-import Script from 'next/script'
 import { Tooltip } from '@nextui-org/react';
 import Image from 'next/image';
 import { RiGithubFill } from 'react-icons/ri';
@@ -46,10 +45,6 @@ export default function Header() {
         {/* 回到顶部 */}
         <BackTop />
       </div>
-      <Script
-          src="https://api.concord.tech/site-v1/b79e079e-2bdf-4048-a587-ea3ffbcd5fe4/site-client"
-          strategy="beforeInteractive"
-        ></Script>
     </header>
   );
 }
