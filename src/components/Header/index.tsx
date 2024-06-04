@@ -8,7 +8,6 @@
 import { Tooltip } from '@nextui-org/react';
 import Image from 'next/image';
 import { RiGithubFill } from 'react-icons/ri';
-import Script from "next/script";
 
 import BackTop from '@/components/BackTop';
 import RealTime from '@/components/RealTime';
@@ -46,7 +45,6 @@ export default function Header() {
         {/* 回到顶部 */}
         <BackTop />
       </div>
-      <script type='text/javascript' src='https://api.concord.tech/site-v1/b79e079e-2bdf-4048-a587-ea3ffbcd5fe4/site-client'></script>
     </header>
   );
 }
