@@ -2,15 +2,14 @@
  * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2024-05-14 09:14:07
  * @LastEditors: 白雾茫茫丶<baiwumm.com>
- * @LastEditTime: 2024-05-14 16:49:40
+ * @LastEditTime: 2025-11-20 15:10:45
  * @Description: 抖音-热点榜
  */
 import { NextResponse } from 'next/server';
 
-import { REQUEST_STATUS_TEXT } from '@/utils/enum';
-import type { HotListItem } from '@/utils/types';
-
-import { responseError, responseSuccess } from '@/utils';
+import { REQUEST_STATUS_TEXT } from '@/lib/constant';
+import type { HotListItem } from '@/lib/type';
+import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
   // 官方 url
@@ -26,7 +25,7 @@ export async function GET() {
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.status_code === 0) {
-      const result: HotListItem[] = responseBody.data.word_list.map((v: Record<string, any>) => {
+      const result: HotListItem[] = responseBody.data.word_list.map((v) => {
         return {
           id: v.group_id,
           title: v.word,
@@ -39,10 +38,8 @@ export async function GET() {
       return NextResponse.json(responseSuccess(result));
     }
     return NextResponse.json(responseSuccess());
-  } catch (error) {
+  } catch {
     return NextResponse.json(responseError);
   }
 }
 
-// 数据过期时间
-export const revalidate = Number(process.env.NEXT_PUBLIC_CACHE_TIME);

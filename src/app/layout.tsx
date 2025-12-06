@@ -1,38 +1,35 @@
 /*
  * @Author: 白雾茫茫丶<baiwumm.com>
- * @Date: 2024-05-08 17:12:20
+ * @Date: 2025-11-19 15:55:09
  * @LastEditors: 白雾茫茫丶<baiwumm.com>
- * @LastEditTime: 2025-08-28 09:32:37
- * @Description: 默认布局
+ * @LastEditTime: 2025-11-21 09:23:37
+ * @Description: 根布局文件
  */
-import { NextUIProvider } from '@nextui-org/react';
-import { ThemeProvider } from 'next-themes';
+import "./globals.css";
 
-import BaiDuAnalytics from '@/components/Analytics/BaiDuAnalytics'; // 百度统计
-import GoogleUtilities from '@/components/Analytics/GoogleUtilities'; // 谷歌统计
-import MicrosoftClarity from '@/components/Analytics/MicrosoftClarity'; // Microsoft Clarity
-import UmamiAnalytics from '@/components/Analytics/UmamiAnalytics'; // Umami Analytics
-import Footer from '@/components/Footer'; // 底部版权
-import FullLoading from '@/components/FullLoading'; // 全局 Loading
-import Header from '@/components/Header'; // 头部布局
+import { Analytics } from '@vercel/analytics/next';
+import type { Metadata } from "next";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-import type { HotListConfig } from '@/utils/types';
+import { BaiDuAnalytics, GoogleUtilities, MicrosoftClarity, UmamiAnalytics } from '@/components/Analytics'
+import BackTop from '@/components/BackTop'
+import Footer from '@/components/Footer'
+import FullLoading from '@/components/FullLoading'
+import Header from '@/components/Header'
+import { hotCardConfig, THEME_MODE } from '@/lib/constant'
 
-import { hotCardConfig } from '@/utils';
-
-import type { Metadata, Viewport } from 'next';
-
-import './globals.scss';
+import pkg from '../../package.json'
+import { Providers } from "./Providers";
 
 export const metadata: Metadata = {
-  title: `${process.env.SITE_TITLE} - ${process.env.SITE_DESCRIPTION}`, // 网站标题
-  description: process.env.SITE_DESCRIPTION, // 网站描述
-  applicationName: process.env.PROJECT_NAME, // 应用名称
-  authors: { name: process.env.AUTHOR_NAME, url: process.env.AUTHOR_BLOG }, // 网站作者
+  title: `${process.env.NEXT_PUBLIC_APP_NAME} - ${process.env.NEXT_PUBLIC_APP_DESC}`, // 网站标题
+  description: process.env.NEXT_PUBLIC_APP_DESC, // 网站描述
+  applicationName: pkg.name, // 应用名称
+  authors: { name: pkg.author.name, url: pkg.author.url }, // 网站作者
   verification: {
     other: { 'baidu-site-verification': 'codeva-kYzuuOyYCZ', 'bytedance-verification-code': 'oPgCIrgBz/3Lhr9BoNE2' },
   }, // 网站验证
-  keywords: hotCardConfig.map((item: HotListConfig) => `${item.label}${item.tip}`).join(','), // 网站关键词
+  keywords: hotCardConfig.map((item) => `${item.label}${item.tip}`).join(','), // 网站关键词
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
@@ -41,25 +38,18 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'zh_CN',
-    url: process.env.SITE_URL,
-    title: process.env.SITE_TITLE,
-    description: process.env.SITE_DESCRIPTION,
-    siteName: process.env.SITE_TITLE,
+    url: process.env.NEXT_PUBLIC_APP_URL,
+    title: process.env.NEXT_PUBLIC_APP_NAME,
+    description: process.env.NEXT_PUBLIC_APP_DESC,
+    siteName: process.env.NEXT_PUBLIC_APP_NAME,
   },
   twitter: {
     card: 'summary_large_image',
-    title: process.env.SITE_TITLE,
-    description: process.env.SITE_DESCRIPTION,
-    images: [`${process.env.SITE_URL}/og.png`],
-    creator: process.env.GITHUB_USERNAME,
+    title: process.env.NEXT_PUBLIC_APP_NAME,
+    description: process.env.NEXT_PUBLIC_APP_DESC,
+    images: [`${process.env.NEXT_PUBLIC_APP_URL}/og.png`],
+    creator: pkg.author.name,
   },
-};
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000' },
-  ],
 };
 
 export default function RootLayout({
@@ -73,27 +63,29 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="https://cdn.baiwumm.com/fonts/MapleMono-CN-Regular/result.css" />
       </head>
+      {/* Umami 统计 */}
+      <UmamiAnalytics />
       {/* 百度统计 */}
       <BaiDuAnalytics />
-      {/* 微软分析 Clarity 代码 */}
-      <MicrosoftClarity />
-      {/* 谷歌统计 */}
+      {/* Google 统计 */}
       <GoogleUtilities />
-      {/* umami - 站点统计分析 */}
-      <UmamiAnalytics />
+      {/* 微软统计 */}
+      <MicrosoftClarity />
       <body>
-        <NextUIProvider>
-          {/* 主体内容 */}
-          <ThemeProvider attribute="class" defaultTheme={process.env.DEFAULT_THEME}>
-            {/* 全局 Loading */}
+        {/* Vercel 分析 */}
+        <Analytics />
+        <Providers>
+          <NextThemesProvider attribute="class" defaultTheme={process.env.NEXT_PUBLIC_THEME || THEME_MODE.LIGHT}>
             <FullLoading />
-            {/* 头部布局 */}
             <Header />
-            <main>{children}</main>
-            {/* 底部版权 */}
+            <main className="container! mx-auto min-h-[calc(100vh-9.1rem)] p-4">
+              {children}
+            </main>
             <Footer />
-          </ThemeProvider>
-        </NextUIProvider>
+            {/* 回到顶部 */}
+            <BackTop />
+          </NextThemesProvider>
+        </Providers>
       </body>
     </html>
   );

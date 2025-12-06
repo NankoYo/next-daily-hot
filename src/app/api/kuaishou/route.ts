@@ -2,15 +2,14 @@
  * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2024-05-14 10:16:28
  * @LastEditors: 白雾茫茫丶<baiwumm.com>
- * @LastEditTime: 2024-05-14 16:52:09
+ * @LastEditTime: 2025-11-20 15:10:10
  * @Description: 快手-热榜
  */
 import { NextResponse } from 'next/server';
 
-import { REQUEST_STATUS_TEXT } from '@/utils/enum';
-import type { HotListItem } from '@/utils/types';
-
-import { responseError, responseSuccess } from '@/utils';
+import { REQUEST_STATUS_TEXT } from '@/lib/constant';
+import type { HotListItem } from '@/lib/type';
+import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
   // 官方 url
@@ -34,7 +33,7 @@ export async function GET() {
     // 获取所有分类
     const allItems = jsonObject['$ROOT_QUERY.visionHotRank({"page":"home"})']['items'];
     // 遍历所有分类
-    allItems.forEach((v: Record<string, any>) => {
+    allItems.forEach((v) => {
       // 基础数据
       const image = jsonObject[v.id]['poster'];
       const id = image.match(idPattern)[1];
@@ -48,10 +47,7 @@ export async function GET() {
       });
     });
     return NextResponse.json(responseSuccess(result));
-  } catch (error) {
+  } catch {
     return NextResponse.json(responseError);
   }
 }
-
-// 数据过期时间
-export const revalidate = Number(process.env.NEXT_PUBLIC_CACHE_TIME);

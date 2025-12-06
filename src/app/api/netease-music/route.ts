@@ -7,10 +7,9 @@
  */
 import { NextResponse } from 'next/server';
 
-import { REQUEST_STATUS_TEXT } from '@/utils/enum';
-import type { HotListItem } from '@/utils/types';
-
-import { responseError, responseSuccess, convertMillisecondsToTime } from '@/utils';
+import { REQUEST_STATUS_TEXT } from '@/lib/constant';
+import type { HotListItem } from '@/lib/type';
+import { convertMillisecondsToTime, responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
   // 官方 url
@@ -31,7 +30,7 @@ export async function GET() {
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.code === 200) {
-      const result: HotListItem[] = responseBody.result.tracks.map((v: Record<string, any>) => {
+      const result: HotListItem[] = responseBody.result.tracks.map((v) => {
         return {
           id: v.id,
           title: v.name,
@@ -45,10 +44,7 @@ export async function GET() {
       return NextResponse.json(responseSuccess(result));
     }
     return NextResponse.json(responseSuccess());
-  } catch (error) {
+  } catch {
     return NextResponse.json(responseError);
   }
 }
-
-// 数据过期时间
-export const revalidate = Number(process.env.NEXT_PUBLIC_CACHE_TIME);

@@ -2,15 +2,14 @@
  * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2024-05-13 16:25:11
  * @LastEditors: 白雾茫茫丶<baiwumm.com>
- * @LastEditTime: 2025-09-04 16:45:41
+ * @LastEditTime: 2025-11-20 15:11:00
  * @Description: 哔哩哔哩-热门榜
  */
 import { NextResponse } from 'next/server';
 
-import { REQUEST_STATUS_TEXT } from '@/utils/enum';
-import type { HotListItem } from '@/utils/types';
-
-import { responseError, responseSuccess } from '@/utils';
+import { REQUEST_STATUS_TEXT } from '@/lib/constant';
+import type { HotListItem } from '@/lib/type';
+import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
   // 官方 url
@@ -34,7 +33,7 @@ export async function GET() {
     if (!data) {
       return NextResponse.json(responseSuccess());
     }
-    const result: HotListItem[] = data.map((v: any) => {
+    const result: HotListItem[] = data.map((v) => {
       return {
         id: v.bvid,
         title: v.title,
@@ -46,10 +45,7 @@ export async function GET() {
       };
     });
     return NextResponse.json(responseSuccess(result));
-  } catch (error) {
+  } catch {
     return NextResponse.json(responseError);
   }
 }
-
-// 数据过期时间
-export const revalidate = Number(process.env.NEXT_PUBLIC_CACHE_TIME);

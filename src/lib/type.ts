@@ -21,8 +21,8 @@ export type HotTypes =
   | 'netease-music';
 
 /**
- * @description: 热榜子项
- */
+* @description: 热榜子项
+*/
 export type HotListItem = {
   id: string; // 唯一 key
   title: string; // 标题
@@ -42,6 +42,7 @@ export type IResponse = {
   code: number;
   msg: string;
   data?: HotListItem[];
+  timestamp: number;
 };
 
 /**
