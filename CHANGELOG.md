@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.1](///compare/3.5.0...3.5.1) (2026-02-06)
+
+### Performance Improvements
+
+* **HotCard:** 优化暗黑主题过渡卡顿的问题 e65f42b
+* TS 类型完善 32c56b5
+
 ## [3.5.0](///compare/3.4.2...3.5.0) (2026-01-26)
 
 ### Features
