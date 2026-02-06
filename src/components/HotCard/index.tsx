@@ -2,7 +2,7 @@
  * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2025-11-20 14:33:28
  * @LastEditors: 白雾茫茫丶<baiwumm.com>
- * @LastEditTime: 2026-01-26 09:26:28
+ * @LastEditTime: 2026-02-06 13:50:57
  * @Description: 热榜卡片
  */
 'use client';
@@ -23,7 +23,6 @@ import utc from 'dayjs/plugin/utc';
 import { CircleX, RefreshCw } from 'lucide-react';
 import { motion, useInView } from 'motion/react';
 import Image from 'next/image';
-import { useTheme } from 'next-themes';
 import { useEffect, useRef } from 'react';
 import { List } from 'react-window';
 
@@ -31,7 +30,7 @@ import RowComponent from './RowComponent';
 
 import 'dayjs/locale/zh-cn';
 import BlurFade from '@/components/BlurFade';
-import { RESPONSE, THEME_MODE } from '@/enums';
+import { RESPONSE } from '@/enums';
 import { CircleCheckIcon } from '@/lib/icons';
 import { useAppStore } from '@/store/useAppStore';
 
@@ -44,9 +43,7 @@ dayjs.locale('zh-cn');
 const HotCard = ({ value, label, tip, prefix, suffix }: App.HotListConfig) => {
   const setUpdateTime = useAppStore(state => state.setUpdateTime);
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref);
-  const { theme } = useTheme();
-  const isLight = theme === THEME_MODE.LIGHT;
+  const isInView = useInView(ref, { once: true });
 
   // 更新相对时间
   const relativeText = useAppStore(state =>
@@ -79,10 +76,10 @@ const HotCard = ({ value, label, tip, prefix, suffix }: App.HotListConfig) => {
 
   // ✅ 使用 ready 控制自动加载（更可靠）
   useEffect(() => {
-    if (isInView && !data?.length) {
+    if (isInView) {
       run();
     }
-  }, [isInView, run, data]);
+  }, [isInView, run]);
   return (
     <Card className="p-0 gap-0 shadow-md border border-default" ref={ref}>
       <Card.Header className="flex justify-between items-center flex-row p-3">
@@ -129,7 +126,7 @@ const HotCard = ({ value, label, tip, prefix, suffix }: App.HotListConfig) => {
                 rowComponent={RowComponent}
                 rowCount={(data || []).length}
                 rowHeight={41}
-                rowProps={{ data, isLight, value, prefix, suffix }}
+                rowProps={{ data, value, prefix, suffix }}
                 className="overflow-x-hidden pr-1"
               />
             </BlurFade>

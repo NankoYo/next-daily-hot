@@ -2,7 +2,7 @@
  * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2026-01-12 15:12:53
  * @LastEditors: 白雾茫茫丶<baiwumm.com>
- * @LastEditTime: 2026-01-26 15:11:13
+ * @LastEditTime: 2026-02-06 13:46:54
  * @Description: 动态列表子项
  */
 import { cn } from '@heroui/react';
@@ -19,12 +19,11 @@ const renderHot = (value: string | number, prefix?: ReactNode, suffix?: ReactNod
   </div>
 );
 
-const RowComponent = ({ index, style, data, isLight = false, value, prefix, suffix }: RowComponentProps<{
+const RowComponent = ({ index, style, data, value, prefix, suffix }: RowComponentProps<{
   data: App.HotListItem[];
-  isLight: boolean;
   value: typeof HOT_ITEMS.valueType;
-  prefix?: string;
-  suffix?: string;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
 }>) => {
   const item = data[index];
   const { label } = item;
@@ -36,9 +35,6 @@ const RowComponent = ({ index, style, data, isLight = false, value, prefix, suff
     : tip
       ? renderHot(tip, prefix, suffix)
       : null;
-
-  // 默认背景色
-  const labelBgColor = !isLight ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0,0,0,.05)';
   return (
     <div style={style} className={cn(
       'flex group justify-between items-center gap-1 min-w-0 py-1.5 w-full border-b border-default',
@@ -49,23 +45,19 @@ const RowComponent = ({ index, style, data, isLight = false, value, prefix, suff
           className="text-xs size-6 rounded shrink-0 flex items-center justify-center"
           style={{
             backgroundColor: label
-              ? (hotLableColor[label] || labelBgColor)
+              ? (hotLableColor[label] || 'var(--hot-label-bg)')
               : hotTagColor[index] ||
-              labelBgColor,
+              'var(--hot-label-bg)',
             color:
-              isLight && (label ? hotLableColor[label] : hotTagColor[index])
+              (label ? hotLableColor[label] : hotTagColor[index])
                 ? 'var(--white)'
-                : 'text-default-foreground',
+                : 'var(--foreground)',
           }}
         >
           {label ? label.slice(0, 1) : index + 1}
         </div>
-
-        <OverflowDetector record={item} type={value}>
-          {item.title}
-        </OverflowDetector>
+        <OverflowDetector record={item} type={value} />
       </div>
-
       {renderEndContent(item.hot, item.tip)}
     </div>
   )
